@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import "./index.css";
 
 const sections = [
   {
     id: "education",
+    number: "01",
     title: "Education",
     eyebrow: "Academic background",
     subtitle: "University of Waterloo",
@@ -12,6 +14,7 @@ const sections = [
   },
   {
     id: "work",
+    number: "02",
     title: "Experience",
     eyebrow: "Professional work",
     subtitle: "Actuarial, insurance, and forensic accounting",
@@ -20,14 +23,16 @@ const sections = [
   },
   {
     id: "hobby",
+    number: "03",
     title: "Hobbies",
     eyebrow: "Outside work",
     subtitle: "Basketball, fitness, and everyday life",
-    detail: "A more personal section for basketball, gym life, travel, campus moments, and photos that make the site feel less like a resume page.",
+    detail: "A personal section for basketball, gym life, travel, campus moments, and photos that make the site feel less like a resume page.",
     note: "Photo gallery placeholder ready.",
   },
   {
     id: "portfolio",
+    number: "04",
     title: "Portfolio",
     eyebrow: "Market interest",
     subtitle: "Personal investing ideas and watchlist",
@@ -56,7 +61,6 @@ const portfolioItems = [
 
 function runSmokeTests() {
   console.assert(sections.length === 4, "Expected four clickable sections.");
-  console.assert(sections.every((section) => section.id && section.title), "Every section needs an id and title.");
   console.assert(sections.some((section) => section.id === "hobby"), "Expected a hobby section.");
   console.assert(sections.some((section) => section.id === "portfolio"), "Expected a portfolio section.");
   console.assert(experiences.length >= 3, "Expected at least three experiences.");
@@ -74,6 +78,7 @@ export default function PersonalWebsite() {
 
   function openSection(id) {
     setActiveSection(id);
+    setResumeOpen(false);
     setRequestSent(false);
   }
 
@@ -95,83 +100,53 @@ export default function PersonalWebsite() {
   }
 
   return (
-    <div className="min-h-screen bg-[#030303] text-white selection:bg-white selection:text-black">
-      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.08),_transparent_28%),radial-gradient(circle_at_80%_20%,_rgba(120,120,120,0.08),_transparent_30%),linear-gradient(180deg,_rgba(255,255,255,0.035),_transparent_35%)]" />
+    <div className="site-shell">
+      <div className="background-glow" />
 
-      <header className="relative z-10 mx-auto flex max-w-7xl items-center justify-between px-5 py-6 md:px-10">
-        <button
-          type="button"
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs tracking-[0.32em] text-zinc-300 transition hover:border-white/30 hover:bg-white/[0.06] hover:text-white"
-        >
+      <header className="site-header">
+        <button className="brand-pill" type="button" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
           YUYUAN CHEN
         </button>
 
-        <nav className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] p-1 backdrop-blur md:flex">
+        <nav className="top-nav">
           {sections.map((section) => (
-            <button
-              key={section.id}
-              type="button"
-              onClick={() => openSection(section.id)}
-              className="rounded-full px-4 py-2 text-sm text-zinc-400 transition hover:bg-white/10 hover:text-white"
-            >
+            <button key={section.id} type="button" onClick={() => openSection(section.id)}>
               {section.title}
             </button>
           ))}
-          <button
-            type="button"
-            onClick={openResume}
-            className="rounded-full bg-white px-4 py-2 text-sm font-medium text-black transition hover:bg-zinc-200"
-          >
+          <button type="button" className="nav-resume" onClick={openResume}>
             Resume
           </button>
         </nav>
       </header>
 
-      <main className="relative z-10 mx-auto max-w-7xl px-5 pb-24 pt-10 md:px-10 md:pt-20">
-        <section className="grid gap-14 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
+      <main className="main-content">
+        <section className="hero-grid">
           <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-            <p className="mb-6 text-xs font-medium uppercase tracking-[0.45em] text-zinc-500">
-              Actuarial Science · Statistics · Markets
-            </p>
-            <h1 className="max-w-4xl text-6xl font-semibold leading-[0.92] tracking-[-0.07em] text-white md:text-8xl lg:text-9xl">
-              Yuyuan Chen
-            </h1>
-            <p className="mt-8 max-w-2xl text-lg leading-8 text-zinc-400 md:text-xl md:leading-9">
+            <p className="kicker">Actuarial Science · Statistics · Markets</p>
+            <h1>Yuyuan Chen</h1>
+            <p className="hero-copy">
               I study actuarial science and statistics at the University of Waterloo. My work sits between insurance pricing, statistical modeling, financial analysis, and personal market research.
             </p>
-            <div className="mt-9 flex flex-wrap gap-3">
-              <button
-                type="button"
-                onClick={() => openSection("work")}
-                className="rounded-full bg-white px-6 py-3 text-sm font-medium text-black transition hover:-translate-y-0.5 hover:bg-zinc-200"
-              >
+            <div className="hero-actions">
+              <button type="button" className="primary-button" onClick={() => openSection("work")}>
                 View Work
               </button>
-              <button
-                type="button"
-                onClick={openResume}
-                className="rounded-full border border-white/15 bg-white/[0.03] px-6 py-3 text-sm text-zinc-200 transition hover:-translate-y-0.5 hover:border-white/40 hover:bg-white/[0.08] hover:text-white"
-              >
+              <button type="button" className="secondary-button" onClick={openResume}>
                 Request Resume Access
               </button>
             </div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15, duration: 0.7 }}
-            className="rounded-[2rem] border border-white/10 bg-white/[0.035] p-7 shadow-2xl shadow-black/40 backdrop-blur"
-          >
-            <p className="text-xs uppercase tracking-[0.35em] text-zinc-600">Current note</p>
-            <p className="mt-5 text-2xl font-light leading-10 text-zinc-200">
+          <motion.aside initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.7 }} className="note-card">
+            <p className="small-label">Current note</p>
+            <p>
               A personal site designed as a quiet archive of work, interests, market notes, and selected life moments — not just a resume template.
             </p>
-          </motion.div>
+          </motion.aside>
         </section>
 
-        <section className="mt-24 grid gap-4 md:grid-cols-2">
+        <section className="section-grid">
           {sections.map((section, index) => (
             <motion.button
               key={section.id}
@@ -180,52 +155,40 @@ export default function PersonalWebsite() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.08 * index, duration: 0.5 }}
               onClick={() => openSection(section.id)}
-              className="group min-h-[260px] rounded-[2rem] border border-white/10 bg-[#080808] p-7 text-left shadow-xl shadow-black/40 transition hover:-translate-y-1 hover:border-white/25 hover:bg-[#0d0d0d]"
+              className="section-card"
             >
-              <div className="flex items-start justify-between gap-6">
+              <div className="section-card-top">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.28em] text-zinc-600">0{index + 1}</p>
-                  <p className="mt-8 text-sm text-zinc-500">{section.eyebrow}</p>
-                  <h2 className="mt-3 text-3xl font-medium tracking-[-0.04em] text-white md:text-4xl">{section.title}</h2>
+                  <p className="card-number">{section.number}</p>
+                  <p className="card-eyebrow">{section.eyebrow}</p>
+                  <h2>{section.title}</h2>
                 </div>
-                <span className="rounded-full border border-white/10 px-3 py-2 text-xl text-zinc-500 transition group-hover:translate-x-1 group-hover:border-white/30 group-hover:text-white">
-                  →
-                </span>
+                <span className="arrow-pill">→</span>
               </div>
-              <p className="mt-7 text-base leading-7 text-zinc-400">{section.subtitle}</p>
-              <p className="mt-4 text-sm leading-6 text-zinc-600">{section.note}</p>
+              <p className="card-subtitle">{section.subtitle}</p>
+              <p className="card-note">{section.note}</p>
             </motion.button>
           ))}
         </section>
 
-        <section className="mt-24 rounded-[2rem] border border-white/10 bg-[#070707] p-7 md:p-10">
-          <p className="text-xs uppercase tracking-[0.35em] text-zinc-600">Selected lines</p>
-          <div className="mt-9 grid gap-12 md:grid-cols-2">
+        <section className="selected-lines">
+          <p className="small-label">Selected lines</p>
+          <div className="line-grid">
             <div>
-              <h3 className="text-2xl font-medium tracking-[-0.03em] text-white">Experience</h3>
-              <div className="mt-6 space-y-4">
+              <h3>Experience</h3>
+              <div className="line-list">
                 {experiences.map((item) => (
-                  <button
-                    key={item}
-                    type="button"
-                    onClick={() => openSection("work")}
-                    className="block w-full rounded-2xl border border-white/10 bg-white/[0.025] px-5 py-4 text-left text-zinc-400 transition hover:border-white/25 hover:bg-white/[0.06] hover:text-white"
-                  >
+                  <button key={item} type="button" onClick={() => openSection("work")} className="line-item">
                     {item}
                   </button>
                 ))}
               </div>
             </div>
             <div>
-              <h3 className="text-2xl font-medium tracking-[-0.03em] text-white">Projects</h3>
-              <div className="mt-6 space-y-4">
+              <h3>Projects</h3>
+              <div className="line-list">
                 {projects.map((item) => (
-                  <button
-                    key={item}
-                    type="button"
-                    onClick={() => openSection(item.includes("Stock") ? "portfolio" : "work")}
-                    className="block w-full rounded-2xl border border-white/10 bg-white/[0.025] px-5 py-4 text-left text-zinc-400 transition hover:border-white/25 hover:bg-white/[0.06] hover:text-white"
-                  >
+                  <button key={item} type="button" onClick={() => openSection(item.includes("Stock") ? "portfolio" : "work")} className="line-item">
                     {item}
                   </button>
                 ))}
@@ -238,13 +201,13 @@ export default function PersonalWebsite() {
       <AnimatePresence>
         {selected && (
           <Panel title={selected.title} onClose={closePanel}>
-            <p className="text-xs uppercase tracking-[0.35em] text-zinc-600">{selected.eyebrow}</p>
-            <h2 className="mt-5 text-5xl font-medium tracking-[-0.06em] text-white">{selected.title}</h2>
-            <p className="mt-6 text-lg leading-8 text-zinc-300">{selected.detail}</p>
-            <p className="mt-4 text-zinc-500">{selected.note}</p>
+            <p className="small-label">{selected.eyebrow}</p>
+            <h2 className="panel-title">{selected.title}</h2>
+            <p className="panel-copy">{selected.detail}</p>
+            <p className="panel-muted">{selected.note}</p>
 
             {selected.id === "education" && (
-              <div className="mt-10 grid gap-4">
+              <div className="detail-stack">
                 <DetailCard title="University of Waterloo" text="Actuarial Science, Honours, Co-operative Program" />
                 <DetailCard title="Second Major" text="Statistics, Honours, Co-operative Program" />
                 <DetailCard title="Certificates" text="Passed CAS MAS-I, SOA Exam P, SOA Exam FM, and completed the Canadian Securities Course." />
@@ -252,7 +215,7 @@ export default function PersonalWebsite() {
             )}
 
             {selected.id === "work" && (
-              <div className="mt-10 grid gap-4">
+              <div className="detail-stack">
                 {experiences.map((item) => (
                   <DetailCard key={item} title={item.split(" · ")[0]} text={item.split(" · ")[1]} />
                 ))}
@@ -260,7 +223,7 @@ export default function PersonalWebsite() {
             )}
 
             {selected.id === "hobby" && (
-              <div className="mt-10 grid gap-4 md:grid-cols-3">
+              <div className="photo-grid">
                 <PhotoPlaceholder label="Basketball" />
                 <PhotoPlaceholder label="Campus life" />
                 <PhotoPlaceholder label="Travel / daily life" />
@@ -268,7 +231,7 @@ export default function PersonalWebsite() {
             )}
 
             {selected.id === "portfolio" && (
-              <div className="mt-10 space-y-4">
+              <div className="detail-stack">
                 {portfolioItems.map((item) => (
                   <DetailCard key={item} title={item} text="Placeholder for personal thesis, allocation notes, and supporting charts." />
                 ))}
@@ -280,24 +243,22 @@ export default function PersonalWebsite() {
         {resumeOpen && (
           <Panel title="Resume Access" onClose={closePanel}>
             {!requestSent ? (
-              <form onSubmit={handleResumeRequest} className="space-y-5">
-                <p className="text-xs uppercase tracking-[0.35em] text-zinc-600">Private document</p>
-                <h2 className="text-5xl font-medium tracking-[-0.06em] text-white">Request resume access</h2>
-                <p className="leading-7 text-zinc-400">
+              <form onSubmit={handleResumeRequest} className="request-form">
+                <p className="small-label">Private document</p>
+                <h2 className="panel-title">Request resume access</h2>
+                <p className="panel-copy">
                   My full resume is not displayed publicly. Please leave your information and I will review the request before sharing it.
                 </p>
-                <input required placeholder="Your name" className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-zinc-100 outline-none transition placeholder:text-zinc-700 focus:border-white/40" />
-                <input required type="email" placeholder="Email" className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-zinc-100 outline-none transition placeholder:text-zinc-700 focus:border-white/40" />
-                <textarea placeholder="Reason for request" className="min-h-28 w-full rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-zinc-100 outline-none transition placeholder:text-zinc-700 focus:border-white/40" />
-                <button type="submit" className="rounded-full bg-white px-6 py-3 text-sm font-medium text-black transition hover:bg-zinc-200">
-                  Send Request
-                </button>
+                <input required placeholder="Your name" />
+                <input required type="email" placeholder="Email" />
+                <textarea placeholder="Reason for request" />
+                <button type="submit" className="primary-button">Send Request</button>
               </form>
             ) : (
               <div>
-                <p className="text-xs uppercase tracking-[0.35em] text-zinc-600">Request received</p>
-                <h2 className="mt-5 text-5xl font-medium tracking-[-0.06em] text-white">Thank you.</h2>
-                <p className="mt-6 leading-7 text-zinc-400">
+                <p className="small-label">Request received</p>
+                <h2 className="panel-title">Thank you.</h2>
+                <p className="panel-copy">
                   Your request has been recorded in this demo. In the live version, this can be connected to email, Google Forms, Formspree, or a small backend.
                 </p>
               </div>
@@ -315,7 +276,7 @@ function Panel({ title, children, onClose }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 bg-black/80 px-4 py-6 backdrop-blur-md"
+      className="panel-backdrop"
       role="dialog"
       aria-modal="true"
       aria-label={title}
@@ -327,12 +288,10 @@ function Panel({ title, children, onClose }) {
         exit={{ opacity: 0, y: 24, scale: 0.98 }}
         transition={{ duration: 0.25 }}
         onMouseDown={(event) => event.stopPropagation()}
-        className="mx-auto max-h-[90vh] max-w-3xl overflow-y-auto rounded-[2rem] border border-white/10 bg-[#060606] p-7 shadow-2xl shadow-black md:p-10"
+        className="panel-card"
       >
-        <div className="mb-8 flex justify-end">
-          <button type="button" onClick={onClose} className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-zinc-400 transition hover:border-white/40 hover:text-white">
-            Close
-          </button>
+        <div className="panel-close-row">
+          <button type="button" onClick={onClose} className="close-button">Close</button>
         </div>
         {children}
       </motion.div>
@@ -342,20 +301,18 @@ function Panel({ title, children, onClose }) {
 
 function DetailCard({ title, text }) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/[0.035] p-6">
-      <h3 className="text-xl font-medium text-white">{title}</h3>
-      <p className="mt-3 leading-7 text-zinc-400">{text}</p>
+    <div className="detail-card">
+      <h3>{title}</h3>
+      <p>{text}</p>
     </div>
   );
 }
 
 function PhotoPlaceholder({ label }) {
   return (
-    <button type="button" className="group flex aspect-[4/5] items-end rounded-[1.5rem] border border-dashed border-white/15 bg-[#0a0a0a] p-5 text-left transition hover:border-white/35 hover:bg-[#111]">
-      <div>
-        <p className="text-sm text-zinc-500 group-hover:text-zinc-300">{label}</p>
-        <p className="mt-2 text-xs text-zinc-700 group-hover:text-zinc-500">Click-ready photo slot</p>
-      </div>
+    <button type="button" className="photo-placeholder">
+      <span>{label}</span>
+      <small>Click-ready photo slot</small>
     </button>
   );
 }
